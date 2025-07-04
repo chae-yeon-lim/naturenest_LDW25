@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NatureNest - Growing Data Together</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 50%, #d4f1d4 100%);
+            background-image: url('nature-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: #2c5530;
+            position: relative;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Header with event image */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .event-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(108, 207, 127, 0.2);
+            margin-bottom: 20px;
+        }
+
+        /* Progress Flow */
+        .progress-flow {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(108, 207, 127, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e8f5e8;
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .progress-line-active {
+            height: 4px;
+            background: linear-gradient(to right, #6bcf7f, #a8d5a8);
+            border-radius: 2px;
+            transition: width 0.8s ease;
+            z-index: 2;
+        }
+
+        .step {
+            background: white;
+            border: 4px solid #e8f5e8;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 3;
+            position: relative;
+        }
+
+        .step.active {
+            border-color: #6bcf7f;
+            background: #6bcf7f;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(108, 207, 127, 0.3);
+        }
+
+        .step.completed {
+            border-color: #a8d5a8;
+            background: #a8d5a8;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Intro Card Styles */
+        .intro-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(108, 207, 127, 0.15);
+            display: block;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .intro-card.active {
+            display: block !important;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* Activity Cards - Hidden by default */
+        .activity-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(108, 207, 127, 0.15);
+            display: none !important;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .activity-card.active {
+            display: block !important;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .activity-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .activity-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .activity-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2c5530;
+            margin-bottom: 15px;
+        }
+
+        .activity-description {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Hidden form for Netlify */
+        .hidden-form {
+            display: none;
+        }
+
+        /* Emotional Journey Styles */
+        .plant-cycle {
+            background: #f8fbf8;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .cycle-stages {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .cycle-stage {
+            background: white;
+            border: 3px solid #e8f5e8;
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            font-weight: 500;
+        }
+
+        .cycle-stage:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(108, 207, 127, 0.2);
+        }
+
+        .cycle-stage.active {
+            border-color: #6bcf7f;
+            background: #6bcf7f;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .stage-emoji {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stage-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .emotion-bar-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .emotion-bar {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(to right, #ff6b6b 0%, #ffd93d 50%, #6bcf7f 100%);
+            border-radius: 30px;
+            position: relative;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .emotion-slider {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            border: 4px solid #2c5530;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .emotion-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .emotion-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .emotion-option {
+            background: #f0f9f0;
+            border: 2px solid #a8d5a8;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .emotion-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(168, 213, 168, 0.3);
+        }
+
+        .emotion-option.selected {
+            background: #6bcf7f;
+            color: white;
+            border-color: #6bcf7f;
+        }
+
+        /* Drawing Activity Styles */
+        .drawing-section {
+            background: #f8fbf8;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .drawing-prompt {
+            background: linear-gradient(135deg, #6bcf7f, #a8d5a8);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .prompt-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .prompt-subtext {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .drawing-tools {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .tool-group {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .color-btn, .tool-btn {
+            width: 45px;
+            height: 45px;
+            border: 3px solid #e0e0e0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-btn {
+            background: white;
+            font-size: 1.2rem;
+        }
+
+        .color-btn.selected, .tool-btn.selected {
+            border-color: #6bcf7f;
+            transform: scale(1.1);
+            box-shadow: 0 3px 10px rgba(108, 207, 127, 0.3);
+        }
+
+        .drawing-canvas {
+            border: 4px solid #6bcf7f;
+            border-radius: 15px;
+            margin: 20px auto;
+            background: white;
+            cursor: crosshair;
+            display: block;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 100%;
+            width: 500px;
+            height: 350px;
+        }
+
+        .text-companion {
+            margin-top: 25px;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 20px;
+            border: 3px solid #e8f5e8;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #6bcf7f;
+        }
+
+        /* Community Board Styles */
+        .community-section {
+            background: #f8fbf8;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .needs-form {
+            display: grid;
+            gap: 25px;
+        }
+
+        .form-group {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .form-group h4 {
+            color: #2c5530;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* Social Media Section */
+        .social-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(108, 207, 127, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(240, 249, 240, 0.8);
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #2c5530;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .social-link:hover {
+            background: #6bcf7f;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #6bcf7f, #a8d5a8);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 207, 127, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #666;
+            margin-right: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        /* Success Messages */
+        .success-message {
+            background: linear-gradient(135deg, #6bcf7f, #a8d5a8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                margin-bottom: 30px;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .progress-line {
+                display: none;
+            }
+
+            .step {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
+            }
+
+            .cycle-stages {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .activity-card {
+                padding: 25px;
+            }
+
+            .drawing-canvas {
+                max-width: 100%;
+                height: 300px;
+            }
+
+            .drawing-tools {
+                justify-content: center;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hidden form for Netlify data collection -->
+    <form name="naturenest-activity" method="POST" data-netlify="true" action="/" class="hidden-form">
+        <input type="hidden" name="form-name" value="naturenest-activity">
+        <input type="hidden" name="timestamp" id="form-timestamp">
+        <input type="hidden" name="seed-emotion-value" id="form-seed-emotion-value">
+        <input type="hidden" name="seed-emotion-words" id="form-seed-emotion-words">
+        <input type="hidden" name="sprout-emotion-value" id="form-sprout-emotion-value">
+        <input type="hidden" name="sprout-emotion-words" id="form-sprout-emotion-words">
+        <input type="hidden" name="growing-emotion-value" id="form-growing-emotion-value">
+        <input type="hidden" name="growing-emotion-words" id="form-growing-emotion-words">
+        <input type="hidden" name="harvest-emotion-value" id="form-harvest-emotion-value">
+        <input type="hidden" name="harvest-emotion-words" id="form-harvest-emotion-words">
+        <input type="hidden" name="drawing-description" id="form-drawing-description">
+        <input type="hidden" name="drawing-data" id="form-drawing-data">
+        <input type="hidden" name="support-needs" id="form-support-needs">
+        <input type="hidden" name="learning-wishes" id="form-learning-wishes">
+        <input type="hidden" name="growing-space" id="form-growing-space">
+    </form>
+
+    <div class="container">
+        <!-- Header with Event Image -->
+        <div class="header">
+            <img src="naturenest-event-banner.jpg" alt="NatureNest - Growing Data Together Event Banner" class="event-image">
+        </div>
+
+        <!-- Progress Flow -->
+        <div class="progress-flow" style="display: none;">
+            <div class="progress-steps">
+                <div class="progress-line">
+                    <div class="progress-line-active" id="progressLineActive" style="width: 33%"></div>
+                </div>
+                
+                <div class="step active" id="step1" onclick="goToStep(1)">
+                    <span>🌱</span>
+                    <div class="step-label">Feel</div>
+                </div>
+                
+                <div class="step" id="step2" onclick="goToStep(2)">
+                    <span>🎨</span>
+                    <div class="step-label">Draw</div>
+                </div>
+                
+                <div class="step" id="step3" onclick="goToStep(3)">
+                    <span>💬</span>
+                    <div class="step-label">Share</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome/Intro Section -->
+        <div class="intro-card active" id="intro-section">
+            <div class="activity-header">
+                <h2 class="activity-title">Welcome to Growing Together Activity!</h2>
+                <p class="activity-description">Help us create digital tools that support nature connection and environmental learning. Your voice matters!</p>
+                
+                <div style="background: linear-gradient(135deg, #e8f5e8, #d4f1d4); border-radius: 15px; padding: 20px; margin: 25px 0;">
+                    <p style="color: #2c5530; font-weight: 600; margin-bottom: 10px;">💻 For Families:</p>
+                    <p style="color: #4a7c59; line-height: 1.6; margin: 0;">Parents and caregivers are welcome to help children complete these activities together. This is a great opportunity to explore feelings about nature and share gardening experiences as a family!</p>
+                </div>
+            </div>
+
+            <div style="background: #f8fbf8; border-radius: 20px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="text-align: center; color: #2c5530; margin-bottom: 30px;">Here's what we'll do together:</h3>
+                
+                <div style="display: grid; gap: 25px; margin-bottom: 30px;">
+                    <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <span style="font-size: 3rem;">🌱</span>
+                            <div>
+                                <h4 style="color: #2c5530; margin-bottom: 10px;">1. Share Your Plant Feelings</h4>
+                                <p style="color: #666; line-height: 1.6;">Tell us how you feel about different stages of plant growth - from tiny seeds to harvest time!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <span style="font-size: 3rem;">🎨</span>
+                            <div>
+                                <h4 style="color: #2c5530; margin-bottom: 10px;">2. Draw Your Garden Story</h4>
+                                <p style="color: #666; line-height: 1.6;">Create a drawing that shows other gardeners who you are and what growing plants means to you!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <span style="font-size: 3rem;">💬</span>
+                            <div>
+                                <h4 style="color: #2c5530; margin-bottom: 10px;">3. Share with Our Community</h4>
+                                <p style="color: #666; line-height: 1.6;">Tell us what support would help you grow better and connect with other plant lovers!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <p style="color: #666; margin-bottom: 25px; font-size: 1.1rem;">Ready to start your co-design activity?</p>
+                    <button class="btn" onclick="startActivities()" style="font-size: 1.2rem; padding: 18px 40px;">Start</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity 1: Emotional Journey -->
+        <div class="activity-card active" id="activity1">
+            <div class="activity-header">
+                <span class="activity-icon">🌱</span>
+                <h2 class="activity-title">How do plants make you feel?</h2>
+                <p class="activity-description">Let's explore your emotions as plants grow from tiny seeds to full grown plants!</p>
+            </div>
+
+            <div class="plant-cycle">
+                <h3 style="text-align: center; margin-bottom: 25px; color: #2c5530;">Choose a plant stage to share your feelings:</h3>
+                
+                <div class="cycle-stages">
+                    <div class="cycle-stage" data-stage="seed" onclick="selectStage('seed')">
+                        <span class="stage-emoji">🌰</span>
+                        <div class="stage-name">Seed</div>
+                    </div>
+                    <div class="cycle-stage" data-stage="sprout" onclick="selectStage('sprout')">
+                        <span class="stage-emoji">🌱</span>
+                        <div class="stage-name">Sprout</div>
+                    </div>
+                    <div class="cycle-stage" data-stage="growing" onclick="selectStage('growing')">
+                        <span class="stage-emoji">🌿</span>
+                        <div class="stage-name">Growing</div>
+                    </div>
+                    <div class="cycle-stage" data-stage="harvest" onclick="selectStage('harvest')">
+                        <span class="stage-emoji">🥕</span>
+                        <div class="stage-name">Harvest</div>
+                    </div>
+                </div>
+
+                <div class="emotion-bar-container" id="emotionBarContainer" style="display: none;">
+                    <h4 style="text-align: center; margin-bottom: 15px;">How do you feel about this stage?</h4>
+                    <div class="emotion-bar" onclick="selectEmotion(event)">
+                        <div class="emotion-slider" id="emotionSlider">😐</div>
+                    </div>
+                    <div class="emotion-labels">
+                        <span>😰 Worried</span>
+                        <span>😐 Okay</span>
+                        <span>😊 Happy</span>
+                    </div>
+                </div>
+
+                <div class="emotion-selector" id="emotionSelector" style="display: none;">
+                    <h4 style="grid-column: 1/-1; text-align: center; margin: 20px 0;">Describe your feelings with your own words:</h4>
+                    <textarea class="text-input" id="emotionWords" placeholder="Type words that describe how you feel about this stage... (for example: excited, nervous, happy, curious)" style="grid-column: 1/-1; min-height: 80px; margin-bottom: 20px;"></textarea>
+                    <div style="grid-column: 1/-1; text-align: center;">
+                        <button class="btn" onclick="submitStageEmotion()" id="submitStageBtn" style="background: #6bcf7f;">Save My Feelings for This Stage</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <div id="stageProgress" style="margin-bottom: 20px; color: #666; display: none;">
+                    <p>✓ <span id="completedStages">0</span> of 4 plant stages completed</p>
+                </div>
+                <button class="btn" onclick="nextActivity()" id="continueBtn1" style="display: none;">Move to Drawing Stage 🎨</button>
+            </div>
+        </div>
+
+        <!-- Activity 2: Drawing Story -->
+        <div class="activity-card" id="activity2">
+            <div class="activity-header">
+                <span class="activity-icon">🎨</span>
+                <h2 class="activity-title">Draw Your Garden Story</h2>
+                <p class="activity-description">Create a picture that shows other gardeners who you are!</p>
+            </div>
+
+            <div class="drawing-section">
+                <div class="drawing-prompt">
+                    <div class="prompt-text">Draw your gardening story for our community gallery</div>
+                    <div class="prompt-subtext">You might include yourself, your plants, your space, or anything else that matters</div>
+                </div>
+
+                <div class="drawing-tools">
+                    <div class="tool-group">
+                        <div class="color-btn selected" style="background-color: #2c5530" data-color="#2c5530" onclick="selectColor(this)"></div>
+                        <div class="color-btn" style="background-color: #6bcf7f" data-color="#6bcf7f" onclick="selectColor(this)"></div>
+                        <div class="color-btn" style="background-color: #ff6b6b" data-color="#ff6b6b" onclick="selectColor(this)"></div>
+                        <div class="color-btn" style="background-color: #ffd93d" data-color="#ffd93d" onclick="selectColor(this)"></div>
+                        <div class="color-btn" style="background-color: #87ceeb" data-color="#87ceeb" onclick="selectColor(this)"></div>
+                    </div>
+                    
+                    <div class="tool-group">
+                        <div class="tool-btn selected" data-tool="brush" onclick="selectTool(this)">🖌️</div>
+                        <div class="tool-btn" data-tool="eraser" onclick="selectTool(this)">🧽</div>
+                        <div class="tool-btn" onclick="clearCanvas()">🗑️</div>
+                    </div>
+                </div>
+
+                <canvas class="drawing-canvas" id="drawingCanvas" width="500" height="350"></canvas>
+
+                <div class="text-companion">
+                    <h4 style="margin-bottom: 15px; color: #2c5530;">Tell us about your drawing:</h4>
+                    <textarea class="text-input" id="drawingDescription" placeholder="Describe your drawing so others can understand your garden story better! For example: 'This is me watering my tomatoes on my balcony...'"></textarea>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="submitDrawing()" id="submitDrawingBtn" style="background: #6bcf7f;">Submit My Drawing</button>
+                <button class="btn" onclick="nextActivity()" id="continueBtn2" style="display: none; margin-left: 15px;">Move to Community Stage 💬</button>
+            </div>
+        </div>
+
+        <!-- Activity 3: Community Sharing -->
+        <div class="activity-card" id="activity3">
+            <div class="activity-header">
+                <span class="activity-icon">💬</span>
+                <h2 class="activity-title">Share with Our Community</h2>
+                <p class="activity-description">Help us understand what support would make your gardening journey even better!</p>
+            </div>
+
+            <div class="community-section">
+                <div class="needs-form">
+                    <div class="form-group">
+                        <h4>Tell us about your growing space! 🌻</h4>
+                        <p style="margin-bottom: 15px; color: #666;">Any size counts - from one plant to a big garden!</p>
+                        <textarea class="text-input" id="growingSpace" placeholder="Describe your growing space - balcony, garden, windowsill, greenhouse, etc. Tell us what you love about it or what challenges you face..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <h4>What would help you grow better? 🌱</h4>
+                        <textarea class="text-input" id="supportNeeds" placeholder="Tell us what kind of help, tips, or resources would make gardening easier for you..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <h4>What do you want to learn? 🌟</h4>
+                        <textarea class="text-input" id="learningWishes" placeholder="What would you love to learn from other gardeners or about plants..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-secondary" onclick="previousActivity()">← Back</button>
+                <button class="btn" onclick="finishJourney()">Finish</button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <h3>🎉 Thank you for joining our co-design activity!</h3>
+            <p style="margin-top: 15px;">Your insights will help us create better digital tools for nature connection and environmental learning.</p>
+        </div>
+
+        <!-- Social Media Section -->
+        <div class="social-section" id="socialSection" style="display: none;">
+            <p style="margin-bottom: 25px; color: #666;">Follow us to stay updated on future activities</p>
+            
+            <div class="social-links">
+                <a href="https://www.linkedin.com/company/naturenest-ed/" class="social-link" target="_blank" rel="noopener noreferrer">
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://instagram.com/naturenest.ed" class="social-link" target="_blank" rel="noopener noreferrer">
+                    <span>Instagram</span>
+                </a>
+                <a href="https://bsky.app/profile/naturenest.bsky.social" class="social-link" target="_blank" rel="noopener noreferrer">
+                    <span>Bluesky</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentStep = 1;
+        let selectedStage = null;
+        let emotionValue = 50;
+        let selectedEmotions = [];
+        let canvas, ctx, isDrawing = false;
+        let currentColor = '#2c5530', currentTool = 'brush';
+        let stageEmotions = {};
+        let drawingSubmitted = false;
+
+        // Initialize - Make sure only intro shows
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDrawingCanvas();
+            
+            // Ensure all activities are hidden initially
+            document.querySelectorAll('.activity-card').forEach(card => {
+                card.style.display = 'none';
+                card.classList.remove('active');
+            });
+            
+            // Make sure intro is visible
+            const introSection = document.getElementById('intro-section');
+            introSection.style.display = 'block';
+            introSection.classList.add('active');
+            
+            // Hide progress bar initially
+            document.querySelector('.progress-flow').style.display = 'none';
+            
+            currentStep = 0;
+        });
+
+        // Step Navigation
+        function startActivities() {
+            // Hide the entire intro section
+            document.getElementById('intro-section').style.display = 'none';
+            document.getElementById('intro-section').classList.remove('active');
+            
+            // Hide the header instructions too
+            document.querySelector('.header').style.display = 'none';
+            
+            // Show progress bar
+            document.querySelector('.progress-flow').style.display = 'block';
+            
+            // Go to first activity
+            goToStep(1);
+        }
+
+        function goToStep(step) {
+            // Hide intro card completely
+            const introSection = document.getElementById('intro-section');
+            introSection.style.display = 'none';
+            introSection.classList.remove('active');
+            
+            // Hide all activity cards first
+            document.querySelectorAll('.activity-card').forEach(card => {
+                card.style.display = 'none';
+                card.classList.remove('active');
+            });
+            
+            // Show selected activity
+            if (step > 0) {
+                const targetActivity = document.getElementById(`activity${step}`);
+                targetActivity.style.display = 'block';
+                targetActivity.classList.add('active');
+            }
+            
+            // Update progress
+            updateProgress(step);
+            currentStep = step;
+        }
+
+        function updateProgress(step) {
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((s, index) => {
+                s.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    s.classList.add('completed');
+                } else if (index + 1 === step) {
+                    s.classList.add('active');
+                }
+            });
+            
+            // Update progress line
+            const progressWidth = step > 0 ? ((step - 1) / 2) * 100 : 0;
+            document.getElementById('progressLineActive').style.width = progressWidth + '%';
+        }
+
+        function nextActivity() {
+            if (currentStep < 3) {
+                goToStep(currentStep + 1);
+            }
+        }
+
+        function previousActivity() {
+            if (currentStep > 1) {
+                goToStep(currentStep - 1);
+            }
+        }
+
+        // Activity 1: Emotional Journey
+        function selectStage(stage) {
+            selectedStage = stage;
+            
+            // Update UI
+            document.querySelectorAll('.cycle-stage').forEach(s => s.classList.remove('active'));
+            document.querySelector(`[data-stage="${stage}"]`).classList.add('active');
+            
+            // Show emotion controls
+            document.getElementById('emotionBarContainer').style.display = 'block';
+            document.getElementById('emotionSelector').style.display = 'grid';
+            
+            // Load previous emotions for this stage if any
+            if (stageEmotions[stage]) {
+                emotionValue = stageEmotions[stage].value;
+                let emotionWords = stageEmotions[stage].words;
+                document.getElementById('emotionWords').value = emotionWords;
+                updateEmotionDisplay();
+            } else {
+                // Reset for new stage
+                emotionValue = 50;
+                let emotionWords = '';
+                document.getElementById('emotionWords').value = '';
+                updateEmotionDisplay();
+            }
+            
+            checkActivity1Complete();
+        }
+
+        function selectEmotion(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+            
+            emotionValue = percentage;
+            updateEmotionDisplay();
+        }
+
+        function submitStageEmotion() {
+            if (!selectedStage) {
+                alert('Please select a plant stage first!');
+                return;
+            }
+            
+            const wordsInput = document.getElementById('emotionWords').value.trim();
+            if (!wordsInput) {
+                alert('Please describe your feelings with some words!');
+                return;
+            }
+            
+            // Save to stage emotions
+            stageEmotions[selectedStage] = {
+                value: emotionValue,
+                words: wordsInput
+            };
+            
+            // Visual feedback
+            const stageElement = document.querySelector(`[data-stage="${selectedStage}"]`);
+            stageElement.style.background = '#a8d5a8';
+            stageElement.style.color = 'white';
+            stageElement.innerHTML = stageElement.innerHTML + ' ✓';
+            
+            alert(`Great! Your feelings for the ${selectedStage} stage have been saved.`);
+            
+            // Reset current selection
+            selectedStage = null;
+            document.querySelectorAll('.cycle-stage').forEach(s => s.classList.remove('active'));
+            document.getElementById('emotionBarContainer').style.display = 'none';
+            document.getElementById('emotionSelector').style.display = 'none';
+            document.getElementById('emotionWords').value = '';
+            emotionValue = 50;
+            updateEmotionDisplay();
+            
+            checkActivity1Complete();
+        }
+
+        function updateEmotionDisplay() {
+            const slider = document.getElementById('emotionSlider');
+            slider.style.left = `calc(${emotionValue}% - 25px)`;
+            
+            // Update emoji based on value
+            if (emotionValue < 30) {
+                slider.textContent = '😰';
+            } else if (emotionValue < 70) {
+                slider.textContent = '😐';
+            } else {
+                slider.textContent = '😊';
+            }
+        }
+
+        function checkActivity1Complete() {
+            const completedStages = Object.keys(stageEmotions).length;
+            const continueBtn = document.getElementById('continueBtn1');
+            const progressDiv = document.getElementById('stageProgress');
+            const completedSpan = document.getElementById('completedStages');
+            
+            progressDiv.style.display = 'block';
+            completedSpan.textContent = completedStages;
+            
+            // Only show continue button when ALL 4 stages are completed
+            if (completedStages >= 4) {
+                continueBtn.style.display = 'inline-block';
+            } else {
+                continueBtn.style.display = 'none';
+            }
+        }
+
+        // Activity 2: Drawing Canvas
+        function setupDrawingCanvas() {
+            canvas = document.getElementById('drawingCanvas');
+            if (!canvas) return;
+            
+            ctx = canvas.getContext('2d');
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = 4;
+
+            // Mouse events
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', handleTouch, { passive: false });
+            canvas.addEventListener('touchmove', handleTouch, { passive: false });
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            if (currentTool === 'brush') {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = 4;
+            } else if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = 15;
+            }
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
+                                            e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function selectColor(element) {
+            document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+            currentColor = element.dataset.color;
+        }
+
+        function selectTool(element) {
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+            currentTool = element.dataset.tool;
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawingSubmitted = false;
+            document.getElementById('submitDrawingBtn').style.display = 'inline-block';
+            document.getElementById('continueBtn2').style.display = 'none';
+        }
+
+        // Drawing submission
+        function submitDrawing() {
+            // Check if canvas has content
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const hasDrawing = imageData.data.some(pixel => pixel !== 0);
+            
+            const drawingDescription = document.getElementById('drawingDescription').value.trim();
+            
+            if (!hasDrawing && !drawingDescription) {
+                alert('Please create a drawing or add a description before submitting!');
+                return;
+            }
+            
+            drawingSubmitted = true;
+            document.getElementById('submitDrawingBtn').style.display = 'none';
+            document.getElementById('continueBtn2').style.display = 'inline-block';
+            
+            alert('Great! Your drawing has been submitted successfully.');
+        }
+
+        // Submit data to Netlify using AJAX (no redirect)
+        function submitToNetlify(data) {
+            // Create form data
+            const formData = new FormData();
+            formData.append('form-name', 'naturenest-activity');
+            formData.append('timestamp', data.timestamp);
+            
+            // Emotion data
+            if (data.emotions.seed) {
+                formData.append('seed-emotion-value', data.emotions.seed.value);
+                formData.append('seed-emotion-words', data.emotions.seed.words);
+            }
+            if (data.emotions.sprout) {
+                formData.append('sprout-emotion-value', data.emotions.sprout.value);
+                formData.append('sprout-emotion-words', data.emotions.sprout.words);
+            }
+            if (data.emotions.growing) {
+                formData.append('growing-emotion-value', data.emotions.growing.value);
+                formData.append('growing-emotion-words', data.emotions.growing.words);
+            }
+            if (data.emotions.harvest) {
+                formData.append('harvest-emotion-value', data.emotions.harvest.value);
+                formData.append('harvest-emotion-words', data.emotions.harvest.words);
+            }
+            
+            // Drawing data
+            formData.append('drawing-description', data.drawing.description);
+            formData.append('drawing-data', data.drawing.canvasData || '');
+            
+            // Community data
+            formData.append('support-needs', data.community.supportNeeds);
+            formData.append('learning-wishes', data.community.learningWishes);
+            formData.append('growing-space', data.community.growingSpace);
+            
+            // Submit via AJAX
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(() => {
+                console.log('Form submitted successfully');
+                // Show success message here instead of redirecting
+                showSuccessMessage();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('There was an error submitting your data. Please try again.');
+            });
+        }
+        
+        function showSuccessMessage() {
+            // Hide all activities
+            document.querySelectorAll('.activity-card').forEach(card => {
+                card.style.display = 'none';
+                card.classList.remove('active');
+            });
+            
+            // Show success message
+            document.getElementById('successMessage').classList.add('show');
+            document.getElementById('socialSection').style.display = 'block';
+            
+            // Update progress to completed
+            document.querySelectorAll('.step').forEach(s => s.classList.add('completed'));
+            document.getElementById('progressLineActive').style.width = '100%';
+        }
+
+        function finishJourney() {
+            // Check if canvas has content
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const hasDrawing = imageData.data.some(pixel => pixel !== 0);
+            
+            const drawingDescription = document.getElementById('drawingDescription').value.trim();
+            const supportNeeds = document.getElementById('supportNeeds').value.trim();
+            const learningWishes = document.getElementById('learningWishes').value.trim();
+            const growingSpace = document.getElementById('growingSpace').value.trim();
+            
+            if (!hasDrawing && !drawingDescription && !supportNeeds && !learningWishes && !growingSpace) {
+                alert('Please complete at least one part of your journey before finishing!');
+                return;
+            }
+            
+            // Prepare data for submission
+            const collectedData = {
+                timestamp: new Date().toISOString(),
+                emotions: stageEmotions,
+                drawing: {
+                    hasDrawing: hasDrawing,
+                    description: drawingDescription,
+                    canvasData: hasDrawing ? canvas.toDataURL() : null
+                },
+                community: {
+                    supportNeeds: supportNeeds,
+                    learningWishes: learningWishes,
+                    growingSpace: growingSpace
+                }
+            };
+            
+            // Submit to Netlify
+            submitToNetlify(collectedData);
+            
+            console.log('Journey completed! Data submitted to Netlify:', collectedData);
+        }
+
+        // Initialize emotion display
+        window.addEventListener('load', function() {
+            updateEmotionDisplay();
+        });
+    </script>
+</body>
+</html>
